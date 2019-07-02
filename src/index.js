@@ -36,8 +36,7 @@ const PodomoroClock = () => {
 
   return (
     <>
-      <h1 id="title">Podomomo Clock</h1>
-      <br />
+      <h1 id="title">&lt;Podomomo Clock /&gt;</h1>
       <Timer
         time={current === 'session' ? sessionX : breakX}
         next={current === 'session' ? breakX : sessionX}
@@ -49,8 +48,6 @@ const PodomoroClock = () => {
         setChanged={setChanged}
         current={current}
       />
-      <br />
-      <br />
       <LengthLabel
         sessionX={sessionX}
         breakX={breakX}
@@ -115,11 +112,9 @@ const Timer = ({
     <>
       <h2 id="timer-label">{nameCapital}</h2>
       <h2 id="time-left">{`${minute}:${seconds}`}</h2>
-
       <button id="start_stop" onClick={startStop}>
         {running ? 'Pause' : 'Play'}
       </button>
-      <span> | </span>
       <button id="reset" onClick={resetAll}>
         Reset
       </button>
@@ -134,7 +129,7 @@ const Timer = ({
 const LengthLabel = ({ sessionX, breakX, setLength, running }) => {
   return (
     <div
-      className="label-container"
+      className="labels-container"
       style={{ display: 'flex', justifyContent: 'center' }}
     >
       <Label
@@ -161,17 +156,17 @@ const Label = ({ name, time, setLength }) => {
 
   return (
     <>
-      <div className={`${name}-container`}>
+      <div className="label-container">
         <div id={`${name}-length`}>{time}</div>
         <div id={`${name}-label`}>{nameCapital} Length</div>
 
         <div className="crementers">
           <button id={`${name}-decrement`} onClick={decrement}>
-            {nameCapital}-
+            -
           </button>
           <span> | </span>
           <button id={`${name}-increment`} onClick={increment}>
-            {nameCapital}+
+            +
           </button>
         </div>
       </div>
