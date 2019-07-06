@@ -8,6 +8,9 @@ const PodomoroClock = () => {
   const [breakX, setBreakX] = React.useState(5);
   const [running, setRunning] = React.useState(false);
   const [changed, setChanged] = React.useState(false);
+  const [beep, setBeep] = React.useState(
+    'https://www.myinstants.com/media/sounds/mlg-airhorn.mp3'
+  );
 
   const setLength = (type, time) => {
     if (!(!running && time > 0 && time <= 60)) return;
@@ -21,32 +24,33 @@ const PodomoroClock = () => {
     setBreakX(5);
     setRunning(false);
     setCurrent('session');
-    const sound = document.getElementById('beep');
-    sound.currentTime = 0;
-    sound.pause();
+    const airHorn = document.getElementById('beep');
+    airHorn.currentTime = 0;
+    airHorn.pause();
   };
 
   const switchTime = () => {
-    if (current === 'session') {
-      setCurrent('break');
-    } else {
-      setCurrent('session');
-    }
+    //setCurrent(current === 'session' ? 'break' : 'session')
+    if (current === 'session') setCurrent('break');
+    else setCurrent('session');
   };
+
+  const changeEffect = event => setBeep(event.target.value);
 
   return (
     <>
-      <h1 id="title">&lt;Podomomo Clock /&gt;</h1>
+      <h1 id="title">&lt;Podomoro Clock /&gt;</h1>
       <Timer
         time={current === 'session' ? sessionX : breakX}
         next={current === 'session' ? breakX : sessionX}
-        reset={reset}
-        switchTime={switchTime}
         running={running}
         setRunning={setRunning}
         changed={changed}
         setChanged={setChanged}
+        reset={reset}
+        switchTime={switchTime}
         current={current}
+        beep={beep}
       />
       <LengthLabel
         sessionX={sessionX}
@@ -54,21 +58,25 @@ const PodomoroClock = () => {
         setLength={setLength}
         running={running}
       />
+      <h3>Link Your Alarm Effect</h3>
+      <input onChange={changeEffect} value={beep} id="beepURL" />
     </>
   );
 };
 
-const Timer = ({
-  time,
-  next,
-  current,
-  reset,
-  switchTime,
-  running,
-  setRunning,
-  changed,
-  setChanged
-}) => {
+const Timer = props => {
+  const {
+    time,
+    next,
+    current,
+    reset,
+    switchTime,
+    running,
+    setRunning,
+    changed,
+    setChanged,
+    beep
+  } = props;
   const [timer, setTimer] = React.useState();
   const [counter, setCounter] = React.useState(time * 60);
 
@@ -90,7 +98,6 @@ const Timer = ({
     reset();
   };
 
-  // Check Time
   if (counter === -1) {
     setCounter(next * 60);
     switchTime();
@@ -106,22 +113,17 @@ const Timer = ({
   let seconds = timeNow % 60;
   seconds = seconds.toString().length === 1 ? `0${seconds}` : `${seconds}`;
 
-  console.log(`${minute}:${seconds}`);
-
   return (
     <>
       <h2 id="timer-label">{nameCapital}</h2>
       <h2 id="time-left">{`${minute}:${seconds}`}</h2>
       <button id="start_stop" onClick={startStop}>
-        {running ? 'Pause' : 'Play'}
+        {running ? 'Pause' : 'Start'}
       </button>
       <button id="reset" onClick={resetAll}>
         Reset
       </button>
-      <audio
-        src="https://www.myinstants.com/media/sounds/mlg-airhorn.mp3"
-        id="beep"
-      />
+      <audio src={beep} id="beep" />
     </>
   );
 };
@@ -150,7 +152,6 @@ const LengthLabel = ({ sessionX, breakX, setLength, running }) => {
 
 const Label = ({ name, time, setLength }) => {
   const nameCapital = name.charAt(0).toUpperCase() + name.slice(1);
-
   const decrement = () => setLength(name, time - 1);
   const increment = () => setLength(name, time + 1);
 
@@ -174,4 +175,4 @@ const Label = ({ name, time, setLength }) => {
   );
 };
 
-ReactDOM.render(<PodomoroClock />, document.getElementById('root'));
+ReactDOM.render(<PodomoroClock />, document.getElementById('podomoro-clock'));

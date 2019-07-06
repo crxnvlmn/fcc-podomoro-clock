@@ -12,6 +12,11 @@ body {
   background: lightskyblue;
 }
 
+#beepURL {
+  width: 400px;
+  margin-bottom: 25px;
+}
+
 #title {
   padding: 30px;
   color: darkcyan;
@@ -22,16 +27,13 @@ body {
 #timer-label {
   font-size: 45px;
   padding-top: 30px;
+  margin-bottom: -30px;
 }
 
 #time-left {
   font-size: 250px;
   color: white;
   text-shadow: 5px 5px black;
-}
-
-#title {
-  text-align: center;
 }
 
 #start_stop,
@@ -88,4 +90,10 @@ button {
 button:hover {
   transform: scale(1.1);
   background: rgba(0, 0, 0, 0.1);
+}
+
+@media only screen and (max-width: 600px) {
+  #time-left {
+    font-size: 130px;
+  }
 }
